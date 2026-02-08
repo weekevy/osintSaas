@@ -1,14 +1,5 @@
-*TECH :>
- -- frontend >
+TECH
+    frontend > (React native)(Tailwind)(ThreeJs)
+    backend > (Nextjs)(RestAPI)(Postgress)
 
-    * React native   > {one page render}
-    * Tailwind
-    * ThreeJs
-
- -- backend > 
-
-    * Nextjs         > {routing}
-    * RestAPI, Flask > {json, xml, xls} 
-    * Postgress      > {SQL query}
-
-
+    
