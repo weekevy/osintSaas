@@ -1,5 +1,4 @@
 # OSINT 
-## ⚠️ Note If you encounter any error with pushing into the original, call me.
 ## Take a look
 __by this lines I'm totally explain where the notes can be taken__
 __we can't explain something or discuss new idea in other files__
