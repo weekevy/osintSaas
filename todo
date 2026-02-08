@@ -1,0 +1,12 @@
+TASKS [*=done / -=not yet]
+
+    [*] install all project packages React NextJs, with testing for the API connection between
+        /client and /server directory
+
+    [-] make endpoint called /login contain a functionaly of login form with fancy design by checking
+        if username and password are right the default gonna be [admin/admin] thos value will be stored
+        in the file itself without connection with databse until we make the database 
+
+    [-] configure database by install MariaDB in a docker container using docker composer
+        then fill databse with random and check the connection between An API, and fetch data        
+        in the web page interface(react)
