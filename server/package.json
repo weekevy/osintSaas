@@ -8,6 +8,7 @@
         "start": "next start -p 4000"
     },
     "dependencies": {
+        "cookie": "^1.1.1",
         "mariadb": "^3.4.5",
         "next": "16.1.6",
         "react": "19.2.3",
