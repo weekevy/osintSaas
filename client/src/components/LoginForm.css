@@ -1,0 +1,100 @@
+/* client/src/components/LoginForm.css */
+
+body {
+  background-color: #000000; /* Completely black background for the entire page */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+  font-family: 'Arial', sans-serif;
+  color: #e0e0e0;
+  overflow: hidden; /* Hide potential overflow from cursor animation */
+}
+
+.login-container {
+  background-color: #000000; /* Completely black for the container */
+  padding: 60px 40px; /* Increased height */
+  border-radius: 10px; /* Subtle rounding on all corners */
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.05); /* Softer, more subtle shadow */
+  width: 300px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid #222; /* Lighter border for contrast */
+}
+
+.login-container h2 {
+  color: #00bcd4; /* A vibrant color for the heading */
+  margin-bottom: 30px;
+  font-size: 1.8em;
+  letter-spacing: 1px;
+}
+
+.input-group {
+  position: relative;
+  margin-bottom: 30px;
+}
+
+.input-group label {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  color: #999;
+  font-size: 0.9em;
+  pointer-events: none;
+  transition: 0.3s ease all;
+}
+
+.input-group input {
+  width: calc(100% - 30px);
+  padding: 15px;
+  background-color: #000000; /* Input background black */
+  border: none; /* Remove all borders initially */
+  border-bottom: 2px solid #555; /* Underline */
+  border-radius: 0; /* Remove border-radius to make it sharp for underline effect */
+  outline: none;
+  color: #e0e0e0;
+  font-size: 1em;
+  transition: border-bottom-color 0.3s ease;
+}
+
+.input-group input:focus {
+  border-bottom-color: #00bcd4; /* Cyan underline on focus */
+}
+
+.input-group input:focus + label,
+.input-group input:not(:placeholder-shown) + label {
+  top: -10px;
+  left: 10px;
+  font-size: 0.75em;
+  color: #00bcd4;
+  background-color: #000000; /* Match the login container background */
+  padding: 0 5px;
+  border-radius: 3px;
+}
+
+.login-button {
+  background-color: #00bcd4;
+  color: #1a1a1a;
+  padding: 15px 30px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1.1em;
+  font-weight: bold;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  width: 100%;
+  margin-top: 20px;
+}
+
+.login-button:hover {
+  background-color: #0097a7;
+  transform: translateY(-2px);
+}
+
+.error-message {
+  color: #ff6b6b;
+  margin-top: 15px;
+  font-size: 0.8em;
+}
