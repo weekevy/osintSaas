@@ -1,16 +1,1 @@
-@import './components/LoginForm.css';
-
-/* Remove default styles that might conflict with the new theme */
-body {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-#root {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
+@import "tailwindcss";
