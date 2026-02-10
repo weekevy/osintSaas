@@ -1,14 +1,20 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import './index.css'
 
-const App = () => {
-    return (
 
-        <div>
-            <h1> HELLO SIR HOW ARE YOU</h1>
-        </div>
-    );
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Login from "./components/Login.jsx";
+import Home from "./components/Home.jsx";
+import "./index.css";
+
+function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route path="/home" element={<Home />} />
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
-
 export default App;
+
