@@ -34,7 +34,7 @@ const Welcome = () => {
                       ${hasAnimated ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'}`}>
         
         {/* Logo */}
-        <h1 className="text-white text-2xl font-robot tracking-tight z-50">
+        <h1 className="text-white font-bold text-2xl font-robot tracking-tight z-50 ">
           OsintWeekeyv
         </h1>
 
@@ -44,7 +44,7 @@ const Welcome = () => {
             <button
               key={item.name}
               onClick={() => navigate(item.path)}
-              className={`relative text-sm font-medium transition-colors duration-300 font-inter
+              className={`relative text-[16px] font-medium transition-colors duration-300 font-inter
                 ${location.pathname === item.path 
                   ? 'text-white' 
                   : 'text-white/70 hover:text-white'
@@ -63,9 +63,9 @@ const Welcome = () => {
         <div className="hidden md:flex items-center gap-4">
           <button
             onClick={() => navigate("/login")}
-            className="px-6 py-2 text-white/80 font-robot hover:text-white transition-colors duration-300"
+            className="px-6 py-2 text-white/80 font-robot  hover:text-white transition-colors duration-300"
           >
-            Login
+            Log in
           </button>
           <button
             onClick={() => navigate("/signup")}
@@ -144,11 +144,11 @@ const Welcome = () => {
                 navigate("/login");
                 setIsMenuOpen(false);
               }}
-              className="w-full px-6 py-3 text-white/80 font-robot hover:text-white 
+              className="w-full px-6 py-3 text-white/80 font-robot  hover:text-white 
                          transition-colors duration-300 text-center border border-white/20 
                          rounded-md hover:bg-white/5" 
             >
-              Login
+              Log in
             </button>
             <button
               onClick={() => {
@@ -176,10 +176,10 @@ const Welcome = () => {
                         ${hasAnimated ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
             <button
                 onClick={() => navigate("/signup")}
-                className="font-robot text-left border border-white p-3 w-[110px] 
+                className="font-robot text-left border border-white p-3 w-[160px] 
                 rounded-md bg-white text-black"
             >
-                Get Started
+                Become a member
             </button>
             <button
                 onClick={() => navigate("/signup")}
@@ -197,6 +197,44 @@ const Welcome = () => {
            information about the company, using efficient technology
            with scale to how much this recuitment
         </p>
+        
+        {/* Simple Table - 4 Links Left, 4 Links Right */}
+        <div className={`absolute left-6
+                         transition-all duration-500 delay-500 ease-out
+                         ${hasAnimated ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
+          <table className="border-collapse">
+            <tbody>
+              <tr>
+                <td className="py-1 pr-5">
+                    <a href="#" className="text-gray-400 hover:text-white transition-colors">Documentation</a>
+                </td>
+                <td className="py-1 pr-5">
+                    <a href="#" className="text-gray-400 hover:text-white transition-colors">Components</a>
+                </td>
+              </tr>
+              <tr>
+                <td className="py-1 pr-5">
+                    <a href="#" className="text-gray-400 hover:text-white transition-colors">References</a>
+
+                </td>
+                <td className="py-1 pr-5">
+
+                    <a href="#" className="text-gray-400 hover:text-white transition-colors">API</a>
+                </td>
+              </tr>
+              <tr>
+                <td className="py-1 pr-5">
+                    <a href="#" className="text-gray-400 hover:text-white transition-colors">Docs</a>
+                </td>
+                <td className="py-1 pr-5">
+
+                    <a href="#" className="text-gray-400 hover:text-white transition-colors">Start</a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
         <div className={`absolute right-200 top-40
                          transition-all duration-500 delay-400 ease-out
                          ${hasAnimated ? 'scale-100 opacity-100' : 'scale-90 opacity-0'}`}>
