@@ -1,10 +1,17 @@
 import { useNavigate, useLocation } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import NeoBlob from './NeonBlob'
+
 const Welcome = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [hasAnimated, setHasAnimated] = useState(false);
+
+  useEffect(() => {
+    // Trigger animations on mount
+    setHasAnimated(true);
+  }, []);
 
   const navItems = [
     { name: "Home", path: "/" },
@@ -20,9 +27,11 @@ const Welcome = () => {
   return (
     <div className="relative min-h-screen bg-black overflow-hidden">
       {/* Navbar */}
-      <nav className="w-full flex justify-between items-center p-3 px-6 
+      <nav className={`w-full flex justify-between items-center p-3 px-6 
                       bg-black/80 fixed top-0 left-0 z-50 
-                      border-b border-white/10">
+                      border-b border-white/10
+                      transition-all duration-400 ease-out
+                      ${hasAnimated ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'}`}>
         
         {/* Logo */}
         <h1 className="text-white text-2xl font-robot tracking-tight z-50">
@@ -54,7 +63,7 @@ const Welcome = () => {
         <div className="hidden md:flex items-center gap-4">
           <button
             onClick={() => navigate("/login")}
-            className="px-6 py-2 text-white/80 font-robot hover:text-white transition-colors duration-300" 
+            className="px-6 py-2 text-white/80 font-robot hover:text-white transition-colors duration-300"
           >
             Login
           </button>
@@ -158,10 +167,13 @@ const Welcome = () => {
 
       {/* Hero Content */}
       <div className="flex flex-col pt-20 pt-34 px-6 pl-110">
-        <h2 className="font-rubik text-white text-5xl text-meduim md:text-6xl text-medium mb-4">
+        <h2 className={`font-rubik text-white text-5xl text-meduim md:text-6xl text-medium mb-4
+                        transition-all duration-400 delay-100 ease-out
+                        ${hasAnimated ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
           Start Doing a Professional <br/> osint break down Scammers
         </h2>
-        <div className="">
+        <div className={`transition-all duration-400 delay-200 ease-out
+                        ${hasAnimated ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
             <button
                 onClick={() => navigate("/signup")}
                 className="font-robot text-left border border-white p-3 w-[110px] 
@@ -177,13 +189,17 @@ const Welcome = () => {
                 About us
             </button>
         </div>
-        <p className="text-white w-lg mt-10">
+        <p className={`text-white w-lg mt-10
+                       transition-all duration-400 delay-300 ease-out
+                       ${hasAnimated ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
            Osint came from constantly diggint through 
            linked or any job requitment check for any suspicious
            information about the company, using efficient technology
            with scale to how much this recuitment
         </p>
-        <div className="absolute right-200 top-40">
+        <div className={`absolute right-200 top-40
+                         transition-all duration-500 delay-400 ease-out
+                         ${hasAnimated ? 'scale-100 opacity-100' : 'scale-90 opacity-0'}`}>
             <NeoBlob/>
         </div>
 
