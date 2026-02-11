@@ -10,13 +10,12 @@ __we can't explain something or discuss new idea in other files__
 ```bash
   git clone git@github.com:weekevy/osintSaas.git # make sure u clone from ssh URL
   cd osintSaas
-  npm install && cd /client && npm run install
-  cd ../server && npm run install
-  cd .. && npm run dev
+  npm install 
+  cd client && npm install && cd ..
+  cd server && npm install && cd ..
+  npm run dev # lunch the project locally
 ```
-
-
-
+## docker configuration [coming soon]
 
 
 
