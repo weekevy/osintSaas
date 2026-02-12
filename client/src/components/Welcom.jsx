@@ -1,247 +1,296 @@
 import { useNavigate, useLocation } from "react-router-dom";
-import { useState, useEffect } from "react";
-import NeoBlob from './NeonBlob'
+import { useState, useEffect, useRef } from "react";
+import {
+  BackgroundEffects,
+  Navbar,
+  MobileMenu,
+  HomeSection,
+  AboutSection,
+  ServicesSection,
+  FaqSection,
+  Footer,
+  LoginModal,
+  RegisterModal
+} from './welcom_components';
+import GlobalStyles from './welcom_components/GlobalStyles';
 
 const Welcome = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [hasAnimated, setHasAnimated] = useState(false);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  
+  // Modal states
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
+  const [loginData, setLoginData] = useState({ email: '', password: '' });
+  const [registerData, setRegisterData] = useState({ 
+    email: '', 
+    password: '', 
+    confirmPassword: '' 
+  });
+  const [loginError, setLoginError] = useState('');
+  const [registerError, setRegisterError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [modalAnimation, setModalAnimation] = useState('closed');
+  
+  // Refs for smooth scrolling
+  const homeRef = useRef(null);
+  const aboutRef = useRef(null);
+  const servicesRef = useRef(null);
+  const faqRef = useRef(null);
 
   useEffect(() => {
-    // Trigger animations on mount
     setHasAnimated(true);
   }, []);
 
+  // Mouse move effect for gradient
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      setMousePosition({ x: e.clientX, y: e.clientY });
+    };
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
+
+  // Smooth scroll function
+  const scrollToSection = (sectionRef, path) => {
+    navigate(path, { replace: true });
+    setTimeout(() => {
+      if (sectionRef?.current) {
+        sectionRef.current.scrollIntoView({ 
+          behavior: 'smooth',
+          block: 'start'
+        });
+      }
+    }, 50);
+  };
+
   const navItems = [
-    { name: "Home", path: "/" },
-    { name: "About", path: "/about" },
-    { name: "Services", path: "/services" },
-    { name: "FAQ", path: "/faq" }
+    { name: "Home", path: "/", ref: homeRef },
+    { name: "About", path: "/about", ref: aboutRef },
+    { name: "Services", path: "/services", ref: servicesRef },
+    { name: "FAQ", path: "/faq", ref: faqRef }
   ];
 
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
+  // Modal handlers
+  const openLoginModal = () => {
+    setModalAnimation('opening');
+    setIsLoginModalOpen(true);
+    setIsRegisterModalOpen(false);
+    setLoginError('');
+    setTimeout(() => setModalAnimation('open'), 50);
+  };
+
+  const openRegisterModal = () => {
+    setModalAnimation('opening');
+    setIsRegisterModalOpen(true);
+    setIsLoginModalOpen(false);
+    setRegisterError('');
+    setTimeout(() => setModalAnimation('open'), 50);
+  };
+
+  const switchToLogin = () => {
+    setModalAnimation('switching');
+    setTimeout(() => {
+      setIsRegisterModalOpen(false);
+      setIsLoginModalOpen(true);
+      setLoginError('');
+      setModalAnimation('open');
+    }, 200);
+  };
+
+  const switchToRegister = () => {
+    setModalAnimation('switching');
+    setTimeout(() => {
+      setIsLoginModalOpen(false);
+      setIsRegisterModalOpen(true);
+      setRegisterError('');
+      setModalAnimation('open');
+    }, 200);
+  };
+
+  const closeModals = () => {
+    setModalAnimation('closing');
+    setTimeout(() => {
+      setIsLoginModalOpen(false);
+      setIsRegisterModalOpen(false);
+      setModalAnimation('closed');
+      setLoginData({ email: '', password: '' });
+      setRegisterData({ email: '', password: '', confirmPassword: '' });
+      setLoginError('');
+      setRegisterError('');
+    }, 300);
   };
 
   return (
-    <div className="relative min-h-screen bg-black overflow-hidden">
-      {/* Navbar */}
-      <nav className={`w-full flex justify-between items-center p-3 px-6 
-                      bg-black/80 fixed top-0 left-0 z-50 
-                      border-b border-white/10
-                      transition-all duration-400 ease-out
-                      ${hasAnimated ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'}`}>
-        
-        {/* Logo */}
-        <h1 className="text-white font-bold text-2xl font-robot tracking-tight z-50 ">
-          OsintWeekeyv
-        </h1>
-
-        {/* Desktop Navigation Links - MIDDLE */}
-        <div className="hidden md:flex items-center gap-8">
-          {navItems.map((item) => (
-            <button
-              key={item.name}
-              onClick={() => navigate(item.path)}
-              className={`relative text-[16px] font-medium transition-colors duration-300 font-inter
-                ${location.pathname === item.path 
-                  ? 'text-white' 
-                  : 'text-white/70 hover:text-white'
-                }
-              `}
-            >
-              {item.name}
-              {location.pathname === item.path && (
-                <span className="absolute -bottom-1 left-0 w-full h-0.5 bg-white rounded-full" />
-              )}
-            </button>
-          ))}
-        </div>
-
-        {/* Desktop Auth Buttons */}
-        <div className="hidden md:flex items-center gap-4">
-          <button
-            onClick={() => navigate("/login")}
-            className="px-6 py-2 text-white/80 font-robot  hover:text-white transition-colors duration-300"
-          >
-            Log in
-          </button>
-          <button
-            onClick={() => navigate("/signup")}
-            className="px-6 py-2 text-black bg-white border-2 border-white  
-                hover:bg-transparent hover:text-white transition-all 
-                duration-300 font-inter text-sm font-medium cursor-pointer rounded-md"
-          >
-            Get Started
-          </button>
-        </div>
-
-        {/* Hamburger Menu Button - Mobile Only */}
-        <button
-          onClick={toggleMenu}
-          className="md:hidden relative z-50 w-10 h-10 flex flex-col items-center justify-center gap-1.5 group"
-          aria-label="Toggle menu"
-        >
-          <span 
-            className={`w-6 h-0.5 bg-white transition-all duration-200 ease-out origin-center
-              ${isMenuOpen ? 'rotate-45 translate-y-2' : ''}`}
-          />
-          <span 
-            className={`w-6 h-0.5 bg-white transition-all duration-200 ease-out
-              ${isMenuOpen ? 'opacity-0 scale-0' : 'opacity-100 scale-100'}`}
-          />
-          <span 
-            className={`w-6 h-0.5 bg-white transition-all duration-200 ease-out origin-center
-              ${isMenuOpen ? '-rotate-45 -translate-y-2' : ''}`}
-          />
-        </button>
-      </nav>
-
-      {/* Mobile Menu Overlay */}
-      <div 
-        className={`fixed inset-0 bg-black/60 backdrop-blur-sm z-40 md:hidden transition-all duration-250
-          ${isMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible'}`}
-        onClick={toggleMenu}
+    <div className="relative bg-black overflow-x-hidden">
+      <BackgroundEffects mousePosition={mousePosition} />
+      
+      <Navbar 
+        location={location}
+        navItems={navItems}
+        hasAnimated={hasAnimated}
+        onNavClick={(item) => {
+          scrollToSection(item.ref, item.path);
+          setIsMenuOpen(false);
+        }}
+        onLoginClick={openLoginModal}
+        onRegisterClick={openRegisterModal}
+        onMenuToggle={() => setIsMenuOpen(!isMenuOpen)}
       />
 
-      {/* Mobile Menu Panel */}
-      <div 
-        className={`fixed top-0 right-0 h-screen w-80 bg-black/90 backdrop-blur-2xl 
-                    border-l border-white/10 z-40 md:hidden transition-transform duration-300 ease-out
-                    shadow-2xl shadow-black/50
-                    ${isMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}
-      >
-        <div className="flex flex-col h-full pt-24 px-8">
-          {/* Mobile Navigation Links */}
-          <div className="flex flex-col gap-6 mb-12">
-            {navItems.map((item) => (
-              <button
-                key={item.name}
-                onClick={() => {
-                  navigate(item.path);
-                  setIsMenuOpen(false);
-                }}
-                className={`relative text-left text-2xl font-medium transition-all duration-300 font-inter
-                  ${location.pathname === item.path 
-                    ? 'text-white translate-x-2' 
-                    : 'text-white/70 hover:text-white hover:translate-x-2'
-                  }
-                `}
-              >
-                {item.name}
-                {location.pathname === item.path && (
-                  <span className="absolute left-0 -bottom-1 w-12 h-0.5 bg-white rounded-full" />
-                )}
-              </button>
-            ))}
-          </div>
+      <MobileMenu 
+        isOpen={isMenuOpen}
+        navItems={navItems}
+        location={location}
+        onNavClick={(item) => {
+          scrollToSection(item.ref, item.path);
+          setIsMenuOpen(false);
+        }}
+        onLoginClick={() => {
+          openLoginModal();
+          setIsMenuOpen(false);
+        }}
+        onRegisterClick={() => {
+          openRegisterModal();
+          setIsMenuOpen(false);
+        }}
+        onClose={() => setIsMenuOpen(false)}
+      />
 
-          {/* Mobile Auth Buttons */}
-          <div className="flex flex-col gap-4 mt-auto mb-12">
-            <button
-              onClick={() => {
-                navigate("/login");
-                setIsMenuOpen(false);
-              }}
-              className="w-full px-6 py-3 text-white/80 font-robot  hover:text-white 
-                         transition-colors duration-300 text-center border border-white/20 
-                         rounded-md hover:bg-white/5" 
-            >
-              Log in
-            </button>
-            <button
-              onClick={() => {
-                navigate("/signup");
-                setIsMenuOpen(false);
-              }}
-              className="w-full px-6 py-3 text-black bg-white border-2 border-white  
-                  hover:bg-transparent hover:text-white transition-all 
-                  duration-300 font-inter text-sm font-medium cursor-pointer rounded-md"
-            >
-              Get Started
-            </button>
-          </div>
-        </div>
-      </div>
+      <HomeSection 
+        ref={homeRef}
+        hasAnimated={hasAnimated}
+        onRegisterClick={openRegisterModal}
+        onServicesClick={() => scrollToSection(servicesRef, '/services')}
+      />
 
-      {/* Hero Content */}
-      <div className="flex flex-col pt-20 pt-34 px-6 pl-110">
-        <h2 className={`font-rubik text-white text-5xl text-meduim md:text-6xl text-medium mb-4
-                        transition-all duration-400 delay-100 ease-out
-                        ${hasAnimated ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
-          Start Doing a Professional <br/> osint break down Scammers
-        </h2>
-        <div className={`transition-all duration-400 delay-200 ease-out
-                        ${hasAnimated ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
-            <button
-                onClick={() => navigate("/signup")}
-                className="font-robot text-left border border-white p-3 w-[160px] 
-                rounded-md bg-white text-black"
-            >
-                Become a member
-            </button>
-            <button
-                onClick={() => navigate("/signup")}
-                className="text-white font-robot text-left border border-white p-3 w-[90px] 
-                rounded-md ml-4"
-            >
-                About us
-            </button>
-        </div>
-        <p className={`text-white w-lg mt-10
-                       transition-all duration-400 delay-300 ease-out
-                       ${hasAnimated ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
-           Osint came from constantly diggint through 
-           linked or any job requitment check for any suspicious
-           information about the company, using efficient technology
-           with scale to how much this recuitment
-        </p>
-        
-        {/* Simple Table - 4 Links Left, 4 Links Right */}
-        <div className={`absolute left-6
-                         transition-all duration-500 delay-500 ease-out
-                         ${hasAnimated ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
-          <table className="border-collapse">
-            <tbody>
-              <tr>
-                <td className="py-1 pr-5">
-                    <a href="#" className="text-gray-400 hover:text-white transition-colors">Documentation</a>
-                </td>
-                <td className="py-1 pr-5">
-                    <a href="#" className="text-gray-400 hover:text-white transition-colors">Components</a>
-                </td>
-              </tr>
-              <tr>
-                <td className="py-1 pr-5">
-                    <a href="#" className="text-gray-400 hover:text-white transition-colors">References</a>
+      <AboutSection ref={aboutRef} />
+      <ServicesSection ref={servicesRef} />
+      
+      <FaqSection 
+        ref={faqRef}
+        onRegisterClick={openRegisterModal}
+      />
 
-                </td>
-                <td className="py-1 pr-5">
+      <Footer />
 
-                    <a href="#" className="text-gray-400 hover:text-white transition-colors">API</a>
-                </td>
-              </tr>
-              <tr>
-                <td className="py-1 pr-5">
-                    <a href="#" className="text-gray-400 hover:text-white transition-colors">Docs</a>
-                </td>
-                <td className="py-1 pr-5">
+      <LoginModal
+        isOpen={isLoginModalOpen}
+        modalAnimation={modalAnimation}
+        loginData={loginData}
+        loginError={loginError}
+        isLoading={isLoading}
+        onLoginDataChange={setLoginData}
+        onSubmit={async (e) => {
+          e.preventDefault();
+          setIsLoading(true);
+          setLoginError('');
+          
+          try {
+            const response = await fetch('/api/login', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                email: loginData.email,
+                password: loginData.password
+              })
+            });
 
-                    <a href="#" className="text-gray-400 hover:text-white transition-colors">Start</a>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+            const data = await response.json();
 
-        <div className={`absolute right-200 top-40
-                         transition-all duration-500 delay-400 ease-out
-                         ${hasAnimated ? 'scale-100 opacity-100' : 'scale-90 opacity-0'}`}>
-            <NeoBlob/>
-        </div>
+            if (response.ok) {
+              localStorage.setItem('token', data.token);
+              localStorage.setItem('user', JSON.stringify(data.user));
+              
+              setModalAnimation('closing');
+              setTimeout(() => {
+                setIsLoginModalOpen(false);
+                setModalAnimation('closed');
+                setLoginData({ email: '', password: '' });
+              }, 300);
+            } else {
+              setLoginError(data.error || data.message || 'Login failed');
+            }
+          } catch (error) {
+            setLoginError('Network error. Please try again.');
+          } finally {
+            setIsLoading(false);
+          }
+        }}
+        onClose={closeModals}
+        onSwitchToRegister={switchToRegister}
+      />
 
-      </div>
+      <RegisterModal
+        isOpen={isRegisterModalOpen}
+        modalAnimation={modalAnimation}
+        registerData={registerData}
+        registerError={registerError}
+        isLoading={isLoading}
+        onRegisterDataChange={setRegisterData}
+        onSubmit={async (e) => {
+          e.preventDefault();
+          
+          if (registerData.password !== registerData.confirmPassword) {
+            setRegisterError('Passwords do not match');
+            return;
+          }
+          
+          setIsLoading(true);
+          setRegisterError('');
+          
+          try {
+            const response = await fetch('/api/register', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                email: registerData.email,
+                password: registerData.password
+              })
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+              const loginResponse = await fetch('/api/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  email: registerData.email,
+                  password: registerData.password
+                })
+              });
+
+              const loginData = await loginResponse.json();
+
+              if (loginResponse.ok) {
+                localStorage.setItem('token', loginData.token);
+                localStorage.setItem('user', JSON.stringify(loginData.user));
+                
+                setModalAnimation('closing');
+                setTimeout(() => {
+                  setIsRegisterModalOpen(false);
+                  setModalAnimation('closed');
+                  setRegisterData({ email: '', password: '', confirmPassword: '' });
+                }, 300);
+              }
+            } else {
+              setRegisterError(data.error || data.message || 'Registration failed');
+            }
+          } catch (error) {
+            setRegisterError('Network error. Please try again.');
+          } finally {
+            setIsLoading(false);
+          }
+        }}
+        onClose={closeModals}
+        onSwitchToLogin={switchToLogin}
+      />
+
+    <GlobalStyles/>
     </div>
   );
 };

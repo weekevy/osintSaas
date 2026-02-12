@@ -1,7 +1,7 @@
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./components/Home.jsx";
-import Welcome from "./components/Welcom.jsx"; // correct spelling
+// import Welcome from "./components/Welcom.jsx";
 import "./index.css";
 
 function App() {
