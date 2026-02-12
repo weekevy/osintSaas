@@ -1,7 +1,7 @@
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Home from "./components/Home.jsx";
-// import Welcome from "./components/Welcom.jsx";
+// import Home from "./components/Home.jsx";
+import Welcome from "./components/Welcom.jsx";
 import "./index.css";
 
 function App() {
@@ -9,7 +9,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Welcome/>} />
-        <Route path="/home" element={<Home />} />
+        {/*}<Route path="/home" element={<Home />} />*/)
       </Routes>
     </BrowserRouter>
   );
