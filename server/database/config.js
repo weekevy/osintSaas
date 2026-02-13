@@ -1,24 +1,16 @@
+import mysql from 'mysql2/promise';
 
-import mariadb from 'mariadb';
-
-// Connection pool
-export const pool = mariadb.createPool({
-  host: 'localhost',      // or container name if using Docker
-  user: 'root',
-  password: 'pass',
-  database: 'mydb',
-  connectionLimit: 5
+const pool = mysql.createPool({
+  host: process.env.DB_HOST || 'localhost',
+  port: process.env.DB_PORT || 3306,
+  user: process.env.DB_USER || 'osint_user',
+  password: process.env.DB_PASSWORD || 'osint_password123',
+  database: process.env.DB_NAME || 'osint_db',
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0,
+  enableKeepAlive: true,
+  keepAliveInitialDelay: 0,
 });
 
-// Helper function to query
-export async function query(sql, params) {
-  let conn;
-  try {
-    conn = await pool.getConnection();
-    const rows = await conn.query(sql, params);
-    return rows;
-  } finally {
-    if (conn) conn.release();
-  }
-}
-
+export default pool;
