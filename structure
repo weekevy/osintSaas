@@ -1,5 +1,35 @@
-TECH
-    frontend > (React native)(Tailwind)(ThreeJs)
-    backend > (Nextjs)(RestAPI)(Postgress)
+TECH, DEPENDENCIES
+ 
+    /client > (
+                "@react-three/drei": "^10.7.7",
+                "@react-three/fiber": "^9.5.0",
+                "@tailwindcss/vite": "^4.1.18",
+                "cookie": "^1.1.1",
+                "framer-motion": "^12.34.0",
+                "jsonwebtoken": "^9.0.3",
+                "react": "^19.2.0",
+                "react-dom": "^19.2.0",
+                "react-router-dom": "^7.13.0",
+                "tailwindcss": "^4.1.18",
+                "three": "^0.182.0" 
+    /server > (
+                "next": "14.0.4",
+                "react": "^18",
+                "react-dom": "^18",
+                "mysql2": "^3.6.5",
+                "jsonwebtoken": "^9.0.2",
+                "bcryptjs": "^2.4.3",
+                "cookie": "^0.6.0"
 
-    
+DATA BASE STRUCTURE
+
+    User Authentication	        users, sessions, api_keys
+    Projects & Collaboration	projects, project_collaborators
+    OSINT Investigations	    targets, scans, findings
+    Threat Intelligence	        indicators, indicator_matches
+    Reporting	                reports, report_templates
+    Alerts System	            alerts, notification_settings
+    Audit Trail	                activity_logs, audit_trail
+    Billing/Subscriptions	    subscriptions, usage_quotas
+    Integrations	            integrations
+    Saved Searches	            saved_searches   
