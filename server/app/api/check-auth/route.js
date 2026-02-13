@@ -42,7 +42,6 @@ export async function GET(request) {
       const refreshDecoded = verifyToken(refreshToken);
       
       if (refreshDecoded) {
-        // Check if session exists
         const [sessions] = await db.execute(
           'SELECT user_id FROM sessions WHERE refresh_token = ? AND expires_at > NOW()',
           [refreshToken]
