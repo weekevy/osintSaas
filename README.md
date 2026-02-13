@@ -1,4 +1,4 @@
-# OSINT 
+# Professional OSINT Investigation Framework v1 
 ## Take a look
 __by this lines I'm totally explain where the notes can be taken__
 __we can't explain something or discuss new idea in other files__
@@ -8,14 +8,31 @@ __we can't explain something or discuss new idea in other files__
 ## Run the web app locally
 - by following those command you can make a fork to commit in same repo
 ```bash
-  git clone git@github.com:weekevy/osintSaas.git # make sure u clone from ssh URL
-  cd osintSaas
-  npm install 
-  cd client && npm install && cd ..
-  cd server && npm install && cd ..
-  npm run dev # lunch the project locally
+  git clone git@github.com:weekevy/osintSaas.git && cd osintSaas
+  # this is the install Dependencies (root, client, server)
+  npm run install-all
+  # Start the databse (Docker required) 
+  docker-compose up -d 
+  # Launch the full application
+
 ```
-## docker configuration [coming soon]
+## docker
+### Database
+- MariaDB	    Main database	          3306	
+- phpMyAdmin	Visual database manager	  8080	
+```bash
+  docker ps             # check what container running 
+  docker-compose down   # Stop database
+  docker-compose up -d  # start database
+  docker logs           # view databse logs
+```
+## Authentication System
+* '/api/register'       POST   Greate new account
+* '/api/login'          POST   Sign in Existing user
+* '/api/check-auth'     GET    Verify current version
+* '/api/logout'         POST   Sign out user
+
+
 
 
 
