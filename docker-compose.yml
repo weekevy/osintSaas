@@ -1,18 +1,42 @@
+version: '3.8'
 
 services:
-  db:
-    build: ./server/database
-    container_name: mariadb
+  mariadb:
+    image: mariadb:10.11
+    container_name: osint_mariadb
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword123
+      MYSQL_DATABASE: osint_db
+      MYSQL_USER: osint_user
+      MYSQL_PASSWORD: osint_password123
     ports:
       - "3306:3306"
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: mydb
-      MYSQL_USER: user
-      MYSQL_PASSWORD: pass
     volumes:
-      - db_data:/var/lib/mysql
+      - mariadb_data:/var/lib/mysql
+      - ./server/database/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - osint_network
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: osint_phpmyadmin
+    restart: always
+    environment:
+      PMA_HOST: mariadb
+      PMA_PORT: 3306
+      # PMA_USER: root
+      # PMA_PASSWORD: rootpassword123
+    ports:
+      - "8080:80"
+    depends_on:
+      - mariadb
+    networks:
+      - osint_network
 
 volumes:
-  db_data:
+  mariadb_data:
 
+networks:
+  osint_network:
+    driver: bridge
