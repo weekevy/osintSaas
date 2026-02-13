@@ -11,7 +11,7 @@ const LoadingSpinner = () => {
       </h2>
       
       <p className="mt-4 text-white/60">
-        Loading amazing things...
+          BE PATIENT MOTHERFUCKER
       </p>
     </div>
   );
