@@ -1,71 +1,102 @@
+import { NextResponse } from 'next/server';
+import db from '@/database/config';
+import { comparePassword } from '@/lib/password';
+import { generateTokens, setTokenCookies } from '@/lib/jwt';
 
-
-import { NextResponse } from "next/server";
-import jwt from "jsonwebtoken";
-import { serialize } from "cookie";
-
-const CORS_HEADERS = {
-  "Access-Control-Allow-Origin": "http://localhost:5173",
-  "Access-Control-Allow-Methods": "POST, OPTIONS",
-  "Access-Control-Allow-Headers": "Content-Type",
-  "Access-Control-Allow-Credentials": "true",
-};
-
-const SECRET_KEY = "YOUR_SECRET_KEY"; // change this to a strong secret
-
-// Preflight request
 export async function OPTIONS() {
-  return new NextResponse(null, { status: 204, headers: CORS_HEADERS });
+  const response = new NextResponse(null, { status: 200 });
+  response.headers.set('Access-Control-Allow-Origin', 'http://localhost:5173');
+  response.headers.set('Access-Control-Allow-Credentials', 'true');
+  response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  return response;
 }
 
-// Login POST
-export async function POST(req) {
-  const { username, password } = await req.json();
+export async function POST(request) {
+  try {
+    const { email, password } = await request.json();
 
-  // simple validation
-  if (!username || !password) {
-    return NextResponse.json(
-      { message: "Username and password cannot be empty" },
-      { status: 400, headers: CORS_HEADERS }
+    // Validate input
+    if (!email || !password) {
+      return NextResponse.json(
+        { error: 'Email and password are required' },
+        { status: 400 }
+      );
+    }
+
+    // Get user from database
+    const [users] = await db.execute(
+      'SELECT id, email, password, first_name, last_name, role FROM users WHERE email = ? AND is_active = TRUE',
+      [email]
     );
-  }
 
-  if (username === "admin" && password === "admin") {
-    // create JWT
-    const token = jwt.sign({ username }, SECRET_KEY, { expiresIn: "1h" });
+    if (users.length === 0) {
+      return NextResponse.json(
+        { error: 'Invalid email or password' },
+        { status: 401 }
+      );
+    }
 
-    // set cookie
-    const cookieHeader = serialize("token", token, {
-      httpOnly: true,
-      path: "/",
-      maxAge: 3600,
-      sameSite: "lax",
+    const user = users[0];
+
+    // Verify password
+    const isValidPassword = await comparePassword(password, user.password);
+    if (!isValidPassword) {
+      return NextResponse.json(
+        { error: 'Invalid email or password' },
+        { status: 401 }
+      );
+    }
+
+    // Generate tokens
+    const tokens = generateTokens(user);
+
+    // Store session in database
+    const expiresAt = new Date();
+    expiresAt.setDate(expiresAt.getDate() + 7);
+
+    await db.execute(
+      'INSERT INTO sessions (user_id, token, refresh_token, expires_at) VALUES (?, ?, ?, ?)',
+      [user.id, tokens.token, tokens.refreshToken, expiresAt]
+    );
+
+    // Update last login
+    await db.execute(
+      'UPDATE users SET last_login = NOW() WHERE id = ?',
+      [user.id]
+    );
+
+    // Log activity
+    await db.execute(
+      'INSERT INTO activity_logs (user_id, action, ip_address, user_agent) VALUES (?, ?, ?, ?)',
+      [user.id, 'LOGIN', request.headers.get('x-forwarded-for') || 'unknown', request.headers.get('user-agent') || 'unknown']
+    );
+
+    // Set cookies
+    const response = NextResponse.json({
+      success: true,
+      user: {
+        id: user.id,
+        email: user.email,
+        firstName: user.first_name,
+        lastName: user.last_name,
+        role: user.role
+      }
     });
 
+    // Add CORS headers
+    response.headers.set('Access-Control-Allow-Origin', 'http://localhost:5173');
+    response.headers.set('Access-Control-Allow-Credentials', 'true');
+    
+    setTokenCookies(response, tokens);
+
+    return response;
+
+  } catch (error) {
+    console.error('Login error:', error);
     return NextResponse.json(
-      { message: "Login successful" },
-      { status: 200, headers: { ...CORS_HEADERS, "Set-Cookie": cookieHeader } }
-    );
-  } else {
-    return NextResponse.json(
-      { message: "Invalid Credentials" },
-      { status: 401, headers: CORS_HEADERS }
+      { error: 'Internal server error' },
+      { status: 500 }
     );
   }
 }
-
-// Logout API
-export async function GET() {
-  const cookieHeader = serialize("token", "", {
-    httpOnly: true,
-    path: "/",
-    maxAge: -1,
-    sameSite: "lax",
-  });
-
-  return NextResponse.json(
-    { message: "Logged out" },
-    { status: 200, headers: { ...CORS_HEADERS, "Set-Cookie": cookieHeader } }
-  );
-}
-
