@@ -5,7 +5,7 @@ const WebhookConfig = () => {
     {
       id: 1,
       name: 'Slack Security Channel',
-      url: 'https://hooks.slack.com/services/T00000000/B00000000/XXXXXXXXXXXXXXXXXXXXXXXX',
+      url: '',
       events: ['alert.critical', 'investigation.created', 'report.generated'],
       status: 'active',
       lastTriggered: '5 min ago'
@@ -13,7 +13,7 @@ const WebhookConfig = () => {
     {
       id: 2,
       name: 'Discord Bot',
-      url: 'https://discord.com/api/webhooks/000000000000000000/XXXXXXXXXXXXXXXXXXXXXXXX',
+      url: '',
       events: ['alert.high', 'threat.detected'],
       status: 'active',
       lastTriggered: '1 hour ago'
