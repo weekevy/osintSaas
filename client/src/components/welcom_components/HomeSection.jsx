@@ -1,6 +1,50 @@
 import { forwardRef } from 'react';
 
 const HomeSection = forwardRef(({ hasAnimated, onRegisterClick, onServicesClick }, ref) => {
+  // Professional SVG icons
+  const getFeatureIcon = (type) => {
+    switch(type) {
+      case 'research':
+        return (
+          <svg className="w-10 h-10 mb-3" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607zM10.5 7.5v6m3-3h-6" stroke="url(#gradient-research)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+            <defs>
+              <linearGradient id="gradient-research" x1="3" y1="12" x2="21" y2="12" gradientUnits="userSpaceOnUse">
+                <stop stopColor="#A855F7"/>
+                <stop offset="1" stopColor="#EC4899"/>
+              </linearGradient>
+            </defs>
+          </svg>
+        );
+      case 'realtime':
+        return (
+          <svg className="w-10 h-10 mb-3" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 6v6l4 2m-4-2a9 9 0 11-18 0 9 9 0 0118 0z" stroke="url(#gradient-realtime)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" transform="rotate(90 12 12)"/>
+            <defs>
+              <linearGradient id="gradient-realtime" x1="3" y1="12" x2="21" y2="12" gradientUnits="userSpaceOnUse">
+                <stop stopColor="#3B82F6"/>
+                <stop offset="1" stopColor="#06B6D4"/>
+              </linearGradient>
+            </defs>
+          </svg>
+        );
+      case 'secure':
+        return (
+          <svg className="w-10 h-10 mb-3" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.75c0 5.592 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.57-.598-3.75h-.152c-3.196 0-6.1-1.248-8.25-3.286z" stroke="url(#gradient-secure)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+            <defs>
+              <linearGradient id="gradient-secure" x1="3" y1="12" x2="21" y2="12" gradientUnits="userSpaceOnUse">
+                <stop stopColor="#EC4899"/>
+                <stop offset="1" stopColor="#A855F7"/>
+              </linearGradient>
+            </defs>
+          </svg>
+        );
+      default:
+        return null;
+    }
+  };
+
   return (
     <section 
       ref={ref} 
@@ -74,14 +118,16 @@ const HomeSection = forwardRef(({ hasAnimated, onRegisterClick, onServicesClick 
                           transition-all duration-700 delay-500
                           ${hasAnimated ? 'translate-y-0 opacity-100' : 'translate-y-12 opacity-0'}`}>
             {[
-              { icon: '🔍', title: 'Deep Research', desc: 'Advanced investigation tools' },
-              { icon: '⚡', title: 'Real-time Data', desc: 'Live information gathering' },
-              { icon: '🛡️', title: 'Secure & Private', desc: 'Your data stays protected' }
+              { icon: 'research', title: 'Deep Research', desc: 'Advanced investigation tools' },
+              { icon: 'realtime', title: 'Real-time Data', desc: 'Live information gathering' },
+              { icon: 'secure', title: 'Secure & Private', desc: 'Your data stays protected' }
             ].map((feature, i) => (
               <div key={i} className="group relative p-6 rounded-2xl bg-white/5 backdrop-blur-xl border border-white/10 
                                     hover:bg-white/10 hover:border-purple-500/50 transition-all duration-500
                                     hover:shadow-xl hover:shadow-purple-500/20 transform hover:scale-105">
-                <div className="text-4xl mb-3">{feature.icon}</div>
+                <div className="text-purple-400 group-hover:scale-110 transition-transform duration-500">
+                  {getFeatureIcon(feature.icon)}
+                </div>
                 <h3 className="text-white font-semibold text-lg mb-2">{feature.title}</h3>
                 <p className="text-white/60 text-sm">{feature.desc}</p>
               </div>
@@ -89,6 +135,18 @@ const HomeSection = forwardRef(({ hasAnimated, onRegisterClick, onServicesClick 
           </div>
         </div>
       </div>
+
+      {/* Add gradient animation keyframes */}
+      <style jsx>{`
+        @keyframes gradient {
+          0%, 100% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+        }
+        .animate-gradient {
+          background-size: 200% 200%;
+          animation: gradient 3s ease infinite;
+        }
+      `}</style>
     </section>
   );
 });

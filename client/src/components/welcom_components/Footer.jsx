@@ -4,7 +4,7 @@ const Footer = () => {
       <div className="relative w-full max-w-7xl mx-auto">
         <div className="flex flex-col md:flex-row justify-between items-center gap-6">
           <div className="text-white/60 text-sm">
-            © 2024 OsintWeekeyv. All rights reserved.
+            © 2026 OsintWeekeyv. All rights reserved.
           </div>
           <div className="flex gap-6">
             <a href="#" className="text-white/40 hover:text-white transition-colors duration-300">Privacy</a>
