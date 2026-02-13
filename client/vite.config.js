@@ -7,6 +7,7 @@ export default defineConfig({
   plugins: [react(), tailwindcss()],
   server: {
     port:5173,
+    host:true,
     proxy: {
       '/api': {
       target: 'http://localhost:4000', // your Next.js backend URL
