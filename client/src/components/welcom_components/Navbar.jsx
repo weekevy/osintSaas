@@ -16,7 +16,7 @@ const Navbar = ({
       
       {/* Logo */}
       <h1 className="text-white font-bold text-xl sm:text-2xl font-robot tracking-tight z-50 whitespace-nowrap relative group">
-        <span className="relative z-10">OsintWeekeyv</span>
+        <span className="relative z-10">WeekeyOsint</span>
         <div className="absolute inset-0 blur-xl bg-gradient-to-r from-purple-500 to-blue-500 opacity-0 group-hover:opacity-50 transition-opacity duration-500" />
       </h1>
 

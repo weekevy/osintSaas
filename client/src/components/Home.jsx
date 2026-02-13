@@ -13,6 +13,7 @@ import {
   APIsDashboard,
   AnalyticsDashboard
 } from "./home_components";
+import { AccountSettings } from "./home_components/settings"; // Import settings modal
 
 const Home = () => {
   const navigate = useNavigate();
@@ -26,6 +27,7 @@ const Home = () => {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [alerts, setAlerts] = useState([]);
   const [timeRange, setTimeRange] = useState("week");
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false); // State for settings modal
 
   // Mock data
   useEffect(() => {
@@ -43,6 +45,20 @@ const Home = () => {
     ]);
 
     setRiskScore(78);
+  }, []);
+
+  // Listen for openSettings event from UserMenu
+  useEffect(() => {
+    const handleOpenSettings = () => {
+      setIsSettingsOpen(true);
+    };
+
+
+    window.addEventListener('openSettings', handleOpenSettings);
+    
+    return () => {
+      window.removeEventListener('openSettings', handleOpenSettings);
+    };
   }, []);
 
   const handleLogout = () => {
@@ -257,6 +273,12 @@ const Home = () => {
           {renderDashboard()}
         </div>
       </main>
+
+      {/* Account Settings Modal */}
+      <AccountSettings 
+        isOpen={isSettingsOpen}
+        onClose={() => setIsSettingsOpen(false)}
+      />
     </div>
   );
 };
